@@ -16,7 +16,6 @@ class LoginResource(Resource):
 
         if callbackURL is None:
             raise DomainNotExistError()
-        return callbackURL
-        # domain_regex = r'^https?:\/\/([^\/\\].*)(\/.*)?$'
+        domain_regex = r'^https?:\/\/([^\/\\].*)(\/.*)?$'
 
-        # return re.search(domain_regex, callbackURL).group(0)
+        return re.search(domain_regex, callbackURL).group(0)
