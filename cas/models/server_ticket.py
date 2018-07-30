@@ -15,7 +15,7 @@ class ServerTicket(db.Model):
     
     def create(domain, username, expireDuration):
         originToken = username + str(time.time())
-        token = uuid.uuid5(uuid.NAMESPACE_OID, originToken)
+        token = str(uuid.uuid5(uuid.NAMESPACE_OID, originToken))
         expire = datetime.datetime.now() + datetime.timedelta(seconds=expireDuration)
         
         st = ServerTicket()
@@ -27,9 +27,9 @@ class ServerTicket(db.Model):
         st.expire = expire
         
         db.session.add(st)
-        db.session.commit(st)
+        db.session.commit()
         
-        return token
+        return st
     
     def __get(token):
         return ServerTicket.query.filter(sqlalchemy.and_(ServerTicket.token == token,

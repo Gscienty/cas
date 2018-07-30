@@ -2,7 +2,7 @@ from flask_restful import Resource, reqparse, HTTPException
 from flask import request
 import re
 from cas.models.application import Application
-from cas.models.user import User
+from cas.models.user_principal import UserPrincipal
 from cas.models.ticket_grant_ticket import TicketGrantTicket
 from cas.models.server_ticket import ServerTicket
 
@@ -77,10 +77,10 @@ class LoginResource(Resource):
 
         appinfo = self.__assertDomain(param.domain)
 
-        if not User.exist(param.username, param.password):
+        if not UserPrincipal.exist(param.username, param.password):
             raise UserNotExistError()
 
-        user = User.get(param.username)
+        user = UserPrincipal.get(param.username)
         if user.available is False:
             raise UserLockedError()
         
@@ -92,6 +92,6 @@ class LoginResource(Resource):
             'ticket_grant_ticket': tgt.token,
             'server_ticket': st.token
         }, 302, {
-            'Location': '%s?token=%s' % (appInfo.callback_url, st.token),
+            'Location': '%s?token=%s' % (appinfo.callback_url, st.token),
             'Set-Cookie': 'ticket_grant_ticket=%s; Expire=%d; Path=/; HttpOnly' % (tgt.token, appinfo.tgt_expire)
         }
