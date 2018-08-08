@@ -1,9 +1,16 @@
 from flask_restful import Resource, reqparse, HTTPException
 import re
+from cas.models.application import Application
+
+DOMAIN_REGEX = r'^https?:\/\/([^\/]+)'
 
 class DomainNotExistError(HTTPException):
     code=401
     description='domain_not_exist'
+
+class DomainFormatError(HTTPException):
+    code=400
+    description='domain_format_error'
 
 class LoginResource(Resource):
     def __init__(self):
@@ -16,6 +23,7 @@ class LoginResource(Resource):
 
         if callbackURL is None:
             raise DomainNotExistError()
-        domain_regex = r'^https?:\/\/([^\/\\].*)(\/.*)?$'
+        if not re.match(DOMAIN_REGEX, callbackURL):
+            raise DomainFormatError()
 
-        # return re.search(domain_regex, callbackURL).group(0)
+        domain = re.search(DOMAIN_REGEX, callbackURL).group(1)
