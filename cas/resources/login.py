@@ -18,4 +18,4 @@ class LoginResource(Resource):
             raise DomainNotExistError()
         domain_regex = r'^https?:\/\/([^\/\\].*)(\/.*)?$'
 
-        return re.search(domain_regex, callbackURL).group(0)
+        # return re.search(domain_regex, callbackURL).group(0)
