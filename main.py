@@ -6,7 +6,7 @@ from cas import app
 
 manager = Manager(app)
 
-manager.add_command('start', Server('0.0.0.0', 5000))
+manager.add_command('start', Server('127.0.0.1', 5000))
 
 if __name__ == '__main__':
     manager.run()
