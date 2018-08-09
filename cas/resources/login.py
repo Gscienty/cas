@@ -12,6 +12,10 @@ class DomainFormatError(HTTPException):
     code=400
     description='domain_format_error'
 
+class DomainNotAvailableError(HTTPExpection):
+    code=403
+    description='domain_not_available'
+
 class LoginResource(Resource):
     def __init__(self):
         self.getRequestParam = reqparse.RequestParser()
@@ -31,4 +35,7 @@ class LoginResource(Resource):
             raise DomainNotExistError()
         
         appInfo = Application.get(domain)
+        if appInfo.available == False:
+            raise DomainNotAvailableError()
+        
         return { 'name': appInfo.name }, 200
