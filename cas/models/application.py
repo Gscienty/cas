@@ -9,9 +9,9 @@ class Application(db.Model):
     tgt_expire = db.Column(db.Integer, nullable=False)
     st_expire = db.Column(db.Integer, nullable=False)
     
-    def existDomain(self, domain):
-        result = self.query.filter(Application.domain == domain).first()
+    def existDomain(domain):
+        result = Application.query.filter(Application.domain == domain).first()
         return result is not None
     
-    def get(self, domain):
-        return self.query.filter(Application.domain == domain).first()
+    def get(domain):
+        return Application.query.filter(Application.domain == domain).first()
