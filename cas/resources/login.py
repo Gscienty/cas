@@ -27,3 +27,8 @@ class LoginResource(Resource):
             raise DomainFormatError()
 
         domain = re.search(DOMAIN_REGEX, callbackURL).group(1)
+        if not Application.existDomain(domain):
+            raise DomainNotExistError()
+        
+        appInfo = Application.get(domain)
+        return { 'name': appInfo.name }, 200
