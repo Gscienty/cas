@@ -1,5 +1,5 @@
 # CAS服务
-本服务提基于CAS协议,实现简易SSO功能(Single Sign On, 单点登录)。可提供跨域名的统一身份认证。本服务基于flask框架实现，运行环境为python3.6.5。
+本服务提基于CAS协议,实现简易SSO功能(Single Sign On, 单点登录)。可提供跨域名的统一身份认证。本服务基于flask框架实现，运行环境为python 3.6.5。
 
 ## CAS服务规程描述
 
@@ -27,3 +27,14 @@ CAS服务规程共计三个，分别为:
 9. cas 接收到 server_validate 的服务请求时， 判断 st 是否存在、是否过期。当符合一切约束要求时，将返回与 st 绑定的 user 相关数据。
 
 在已登录 cas 的 user 执行该规程时，即已经获得尚未过期的 tgt。不需要用户再次输入用户凭证及口令，cas可直接颁发st。
+
+## 如何使用
+该服务运行在python 3.6.5环境下，相关的依赖库已经标记在 requirements.txt 当中，可使用pip进行安装：
+```bash
+$ pip3 install -r requirements.txt
+```
+
+运行该服务的方法如下：
+```bash
+$ python3 main.py start
+```
