@@ -43,4 +43,4 @@ class ServerTicket(db.Model):
         st = ServerTicket.__get(token)
         if st is None:
             return None
-        return st.username
+        return st.username, st.domain
