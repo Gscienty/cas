@@ -38,3 +38,13 @@ $ pip3 install -r requirements.txt
 ```bash
 $ python3 main.py start
 ```
+
+数据库的建表sql 在文件 cas_schema.sql 中，在cas/config.cfg可修改连接数据库的配置，可根据本地需要进行修改。
+
+## Web API
+1. GET /login?domain=<app域>
+若用户已获取tgt，则直接返回302，跳转到指定的app的回调地址，并携带st；若用户尚未获取tgt，则返回该app的相关信息
+2. POST /login -d { "username": <用户名>, "password": <密码>, "domain": <app域> }
+用户登录，若登录成功，则返回302，跳转指定的app的回调地址，并携带st及tgt。
+3. GET /server_validate?token=<st>
+获取st绑定的用户数据及用户权限tag
