@@ -8,10 +8,11 @@ create table application (
     st_expire integer not null
 );
 
-create table application_user (
+create table user_principal (
     username varchar(64) primary key,
     password char(64) not null,
-    available tinyint not null
+    available tinyint not null,
+    profile TEXT
 );
 
 create table ticket_grant_ticket (
@@ -27,4 +28,11 @@ create table server_ticket (
     domain varchar(64) not null,
     create_time TIMESTAMP not null,
     expire TIMESTAMP not null
+);
+
+create table user_permission (
+    username varchar(64) primary key,
+    domain varchar(64) not null,
+    tag varchar(32) not null,
+    available tinyint not null
 );
