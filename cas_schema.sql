@@ -3,6 +3,7 @@ use cas;
 create table application (
     domain varchar(64) primary key,
     name varchar(32) not null,
+    callback_url varchar(128) not null,
     available tinyint not null,
     tgt_expire integer not null,
     st_expire integer not null
