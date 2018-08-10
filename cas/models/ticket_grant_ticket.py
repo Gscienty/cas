@@ -15,14 +15,14 @@ class TicketGrantTicket(db.Model):
     def create(username, expireDuration):
         originToken = username + str(time.time())
         token = uuid.uuid5(uuid.NAMESPACE_OID, originToken)
-        expire = time.time() + expireDuration
+        expire = datetime.datetime.now() + datetime.timedelta(seconds=expireDuration)
         
         tgt = TicketGrantTicket()
         
         tgt.token = token
         tgt.username = username
         tgt.create_time = datetime.datetime.now()
-        tgt.expire = datetime.datetime.now() + datetime.timedelta(seconds=expireDuration)
+        tgt.expire = expire
         
         db.session.add(tgt)
         db.session.commit()
