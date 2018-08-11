@@ -67,8 +67,9 @@ class LoginResource(Resource):
             
             return {
                 'message': 'login_success',
-                'server_ticket': st.token
-            }, 302, { 'Location': '%s?token=%s' % (appInfo.callback_url, st.token) }
+                'server_ticket': st.token,
+                'callback_url': '%s?token=%s' % (appinfo.callback_url, st.token)
+            }, 200
         
         return { 'name': appinfo.name }, 200
     
@@ -90,8 +91,8 @@ class LoginResource(Resource):
         return {
             'message': 'login_success',
             'ticket_grant_ticket': tgt.token,
-            'server_ticket': st.token
-        }, 302, {
-            'Location': '%s?token=%s' % (appinfo.callback_url, st.token),
+            'server_ticket': st.token,
+            'callbacl_url': '%s?token=%s' % (appinfo.callback_url, st.token)
+        }, 200, {
             'Set-Cookie': 'ticket_grant_ticket=%s; Expire=%d; Path=/; HttpOnly' % (tgt.token, appinfo.tgt_expire)
         }

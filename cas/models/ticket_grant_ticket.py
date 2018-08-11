@@ -40,4 +40,4 @@ class TicketGrantTicket(db.Model):
         tgt = TicketGrantTicket.__get(token)
         if tgt is None:
             return None
-        return tgt.username
+        return tgt

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>CAS 统一登录</title>
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="login.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+<div class="login_box">
+    <div class="login_l_img"><img src="images/login-img.png"/></div>
+    <div class="login">
+        <div class="login_logo"><a href="#"><img src="images/login_logo.png"/></a></div>
+        <div class="login_name">
+            <p>CAS 统一登录 <br /> <span id="domain-name"></span></p>
+            
+        </div>
+        <div method="post">
+            <input name="username" id="username" type="text" value="用户名" onfocus="this.value=''"
+                   onblur="if(this.value==''){this.value='用户名'}">
+            <span id="password_text"
+                  onclick="this.style.display='none';document.getElementById('password').style.display='block';document.getElementById('password').focus();">密码</span>
+            <input name="password" type="password" id="password" style="display:none;"
+                   onblur="if(this.value==''){document.getElementById('password_text').style.display='block';this.style.display='none'};"/>
+            <input type="hidden" id="domain" name="domain" value="" />
+            <input value="登录" onclick="login();" style="width:100%;" type="submit">
+        </div>
+    </div>
+    <div class="copyright">健康云平台有限公司 版权所有©2016-2018 技术支持电话：0531-00000000</div>
+</div>
+<div style="text-align:center;"></div>
+
+<div class="modal fade alert-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">提示</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p id='modal-msg'></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary alert-yes">确定</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script>
+    $('#domain').val(location.search.split('=')[1]);
+    $('.alert-yes').click(function() {
+        $('.modal').modal('toggle');
+    })
+
+    $.ajax({
+        url: '/login' + location.search,
+        success: function(data) {
+            if (data.callback_url) {
+                location.href = data.callback_url;
+            }
+            $('#domain-name').text(data.name);
+        },
+        error: function(msg) {
+            if (msg.status === 401) {
+                location.href = '/domain_not_exist.html';
+            }
+        }
+    });
+
+    function login() {
+        $.ajax({
+            url: '/login',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                'username': $('#username').val(),
+                'password': $('#password').val(),
+                'domain': $('#domain').val()
+            }),
+            success: function (data) {
+                if (data.callbacl_url) {
+                    location.href = data.callbacl_url;
+                }
+            },
+            error: function(data) {
+                if (data.status === 404) {
+                    $('#modal-msg').text('账号或密码错误.');
+                    $('.modal').modal('toggle');
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>

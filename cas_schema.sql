@@ -38,5 +38,5 @@ create table user_permission (
     tag varchar(32) not null,
     available tinyint not null,
 
-    index user_permission_username_index username,
+    index user_permission_username_index username
 );
