@@ -42,9 +42,68 @@ $ python3 main.py start
 数据库的建表sql 在文件 cas_schema.sql 中，在cas/config.cfg可修改连接数据库的配置，可根据本地需要进行修改。
 
 ## Web API
-1. GET /login?domain=<app域>
-若用户已获取tgt，则直接返回302，跳转到指定的app的回调地址，并携带st；若用户尚未获取tgt，则返回该app的相关信息
-2. POST /login -d { "username": <用户名>, "password": <密码>, "domain": <app域> }
-用户登录，若登录成功，则返回302，跳转指定的app的回调地址，并携带st及tgt。
-3. GET /server_validate?token=<st>
-获取st绑定的用户数据及用户权限tag
+
+### app登录信息
+HTTP Method: GET
+
+访问URL: ```/login?domain=<app标识>```
+
+接口描述： 获取app信息
+
+返回结果： 
+
+如果用户尚未登录，或TGT已经过期，并且app标识在CAS中存在，则返回app的相关信息
+```json
+{
+    "name": "<app名称>"
+}
+```
+
+如果用户已经登录，并且TGT尚未过期，并且app标识在CAS中存在，则返回如下信息
+```json
+{
+    "message": "login_success",
+    "server_ticket": "<ST票证token>",
+    "callback_url": "<回调地址>"
+}
+```
+
+### app登录
+HTTP Method：POST
+
+访问URL：```/login```
+
+接口描述：用户登录CAS
+
+访问参数：
+```
+{
+    "username": "<用户名>",
+    "password": "<口令>",
+    "domain": "<app标识>"
+}
+```
+
+返回结果:
+
+如果用户登录成功，将返回如下信息：
+```
+{
+    "message": "login_success",
+    "ticket_grant_ticket": "<票证授予票证TGT token>",
+    "server_ticket": "<服务票证ST token>",
+    "callbacl_url": "<回调地址>"
+```
+
+### 服务器获取已认证用户信息
+HTTP Method: GET
+
+访问地址: ```/server_validate?token=<ST token>```
+
+返回结果：
+```
+[
+    "<权限标识tag>",
+    ...
+]
+```
